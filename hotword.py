@@ -11,12 +11,15 @@ def init():
         'hotword_models/Lights.pmdl',
         'hotword_models/computer.pmdl',
         'hotword_models/hey_sam.pmdl',
+        'hotword_models/weather.pmdl',
         'hotword_models/whats_the_weather_like.pmdl',
+
     ]
     callbacks = [
         lambda: hotword_callback('lights'),
         lambda: hotword_callback('computer'),
         lambda: hotword_callback('hey_sam'),
+        lambda: hotword_callback('weather'),
         lambda: hotword_callback('whats_the_weather_like'),
     ]
     sensitivity = [0.4]*len(hotword_models)
@@ -40,10 +43,12 @@ def hotword_callback(keyword):
     if keyword == 'lights':
         lights.toggle_lights()
     elif keyword == 'computer':
+        snowboydecoder.play_audio_file(snowboydecoder.DETECT_DONG)
         wol.wake_computer()
     elif keyword == 'hey_sam':
         sam.say('What')
-    elif keyword == 'whats_the_weather_like':
+    elif keyword == 'weather' or keyword == 'whats_the_weather_like':
+        snowboydecoder.play_audio_file(snowboydecoder.DETECT_DONG)
         sam.get_weather()
     else:
         print('Nothing')
