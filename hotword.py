@@ -41,17 +41,20 @@ def init():
 def hotword_callback(keyword):
     print('Keyword %s' % keyword)
     if keyword == 'lights':
+        play_confirmation_sound()
         lights.toggle_lights()
     elif keyword == 'computer':
-        snowboydecoder.play_audio_file(snowboydecoder.DETECT_DONG)
+        play_confirmation_sound()
         wol.wake_computer()
     elif keyword == 'hey_sam':
         sam.say('What')
     elif keyword == 'weather' or keyword == 'whats_the_weather_like':
-        snowboydecoder.play_audio_file(snowboydecoder.DETECT_DONG)
+        play_confirmation_sound()
         sam.get_weather()
-    else:
-        print('Nothing')
+
+
+def play_confirmation_sound():
+    snowboydecoder.play_audio_file(snowboydecoder.DETECT_DONG)
 
 
 def signal_handler(signal, frame):
