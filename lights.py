@@ -7,10 +7,11 @@ hue = Bridge('192.168.1.46', user)
 
 
 def toggle_lights():
-    for light in hue.lights():
-        if hue.lights[light]()['state']['on']:
-            # Turn lights on
-            hue('lights', light, 'state', on=False)
-        else:
-            # Turn lights off
-            hue('lights', light, 'state', on=True)
+    if hue.lights[1]()['state']['on']:
+        # Turn lights off
+        # hue('lights', 1, 'state', on=False)
+        hue.groups[1].action(on=False)
+    else:
+        # Turn lights on
+        # hue('lights', 1, 'state', on=True)
+        hue.groups[1].action(on=True)
