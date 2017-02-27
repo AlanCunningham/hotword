@@ -1,27 +1,26 @@
 import snowboy.snowboydecoder as snowboydecoder
 import lights
-import wol
+import bash_scripts
 import sam
+import os
 
 interrupted = False
 
 
 def init():
-    hotword_models = [
-        'hotword_models/Lights.pmdl',
-        'hotword_models/computer.pmdl',
-        'hotword_models/hey_sam.pmdl',
-        'hotword_models/weather.pmdl',
-        'hotword_models/whats_the_weather_like.pmdl',
 
-    ]
-    callbacks = [
-        lambda: hotword_callback('lights'),
-        lambda: hotword_callback('computer'),
-        lambda: hotword_callback('hey_sam'),
-        lambda: hotword_callback('weather'),
-        lambda: hotword_callback('whats_the_weather_like'),
-    ]
+    hotword_models = []
+    callbacks = []
+    model_files_dir = 'hotword_models/'
+    model_files = os.listdir('hotword_models')
+
+    # Find all models and create a list of callbacks
+    for model in model_files:
+        hotword_models.append(model_files_dir + model)
+        callbacks.append(
+            lambda model=model: hotword_callback(model.split('.')[0])
+        )
+
     sensitivity = [0.4]*len(hotword_models)
 
     # Setup hotword detector
@@ -39,17 +38,22 @@ def init():
 
 
 def hotword_callback(keyword):
-    print('Keyword %s' % keyword)
+    play_confirmation_sound()
+
+    # Lights
     if keyword == 'lights':
-        play_confirmation_sound()
         lights.toggle_lights()
+
+    # Bash scripts
     elif keyword == 'computer':
-        play_confirmation_sound()
-        wol.wake_computer()
+        bash_scripts.wake_computer()
+    elif keyword == 'screen_on':
+        bash_scripts.screen_on()
+
+    # SAM responses
     elif keyword == 'hey_sam':
-        sam.say('What')
+        sam.hotword_response()
     elif keyword == 'weather' or keyword == 'whats_the_weather_like':
-        play_confirmation_sound()
         sam.get_weather()
 
 

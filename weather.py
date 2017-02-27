@@ -25,7 +25,6 @@ class Weather:
         r = requests.get(request_url)
         resp = requests.get(url=request_url)
         self.result = json.loads(resp.text)
-        print(2)
 
         self.suggest_clothes()
 
