@@ -1,6 +1,4 @@
 # Dependancies:
 - snowboy kitt.ai
-- pip install qhue
-- pipinstall gTTS
-- sudo apt-get install mpg321
-- sudo apt-get install wakeonlan
+- pip install qhue gTTS schedule
+- sudo apt-get install mpg321 wakeonlan libatlas3-base

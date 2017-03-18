@@ -5,6 +5,7 @@ import sam
 import os
 
 interrupted = False
+previous_command = ''
 
 
 def init():
@@ -39,7 +40,7 @@ def init():
 
 def hotword_callback(keyword):
     play_confirmation_sound()
-
+    global previous_command
     # Lights
     if keyword == 'lights':
         lights.toggle_lights()
@@ -55,6 +56,14 @@ def hotword_callback(keyword):
         sam.hotword_response()
     elif keyword == 'weather' or keyword == 'whats_the_weather_like':
         sam.get_weather()
+
+    # Cancel previous commands
+    elif (previous_command != 'cancel_that') \
+            and (keyword == 'cancel_that' or keyword == 'angry_no'):
+        hotword_callback(previous_command)
+        print('Previous command: %s' % previous_command)
+
+    previous_command = keyword
 
 
 def play_confirmation_sound():
