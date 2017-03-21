@@ -12,15 +12,30 @@ def init():
 
     hotword_models = []
     callbacks = []
-    model_files_dir = 'hotword_models/'
-    model_files = os.listdir('hotword_models')
+    hotword_dict = {}
+    main_model_folder = 'hotword_models'
+    model_dir = os.listdir('hotword_models')
 
-    # Find all models and create a list of callbacks
-    for model in model_files:
-        hotword_models.append(model_files_dir + model)
-        callbacks.append(
-            lambda model=model: hotword_callback(model.split('.')[0])
-        )
+    # Each voice model is stored in a category folder
+    # e.g. hotword_models/weather/whats_the_weather_like.pdml
+    # This section finds all categories and models to create a dictionary
+    # of commands.
+    for category in model_dir:
+        cat = os.listdir(main_model_folder + '/' + category)
+        # Model inside this category
+        for model in cat:
+            split_model = model.split('.')[0]
+            file_path = main_model_folder + '/' + category + '/' + model
+            hotword_dict[split_model] = {
+                'category': category,
+                'file': file_path
+            }
+            hotword_models.append(file_path)
+            callbacks.append(
+                lambda model=model: hotword_callback(
+                    hotword_dict[model.split('.')[0]]
+                )
+            )
 
     sensitivity = [0.4]*len(hotword_models)
 
@@ -38,30 +53,30 @@ def init():
     )
 
 
+# Check against the category - we can have multiple voice   models per category
 def hotword_callback(keyword):
     play_confirmation_sound()
     global previous_command
     # Lights
-    if keyword == 'lights':
+    if keyword['category'] == 'lights':
         lights.toggle_lights()
 
     # Bash scripts
-    elif keyword == 'computer':
+    elif keyword['category'] == 'computer':
         bash_scripts.wake_computer()
-    elif keyword == 'screen_on':
+    elif keyword['category'] == 'screen_on':
         bash_scripts.screen_on()
 
     # SAM responses
-    elif keyword == 'hey_sam':
+    elif keyword['category'] == 'activation':
         sam.hotword_response()
-    elif keyword == 'weather' or keyword == 'whats_the_weather_like':
+    elif keyword['category'] == 'weather':
         sam.get_weather()
 
     # Cancel previous commands
     elif (previous_command != 'cancel_that') \
-            and (keyword == 'cancel_that' or keyword == 'angry_no'):
+            and (keyword['category'] == 'cancel'):
         hotword_callback(previous_command)
-        print('Previous command: %s' % previous_command)
 
     previous_command = keyword
 
