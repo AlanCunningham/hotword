@@ -2,6 +2,7 @@ import snowboy.snowboydecoder as snowboydecoder
 import lights
 import bash_scripts
 import sam
+import news
 import os
 
 interrupted = False
@@ -72,6 +73,10 @@ def hotword_callback(keyword):
         sam.hotword_response()
     elif keyword['category'] == 'weather':
         sam.get_weather()
+
+    # News briefing
+    elif keyword['category'] == 'news':
+        news.play()
 
     # Cancel previous commands
     elif (previous_command != 'cancel_that') \
