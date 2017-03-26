@@ -61,12 +61,15 @@ def hotword_callback(keyword):
     # Lights
     if keyword['category'] == 'lights':
         lights.toggle_lights()
+    if keyword['category'] == 'turn_everything_off':
+        lights.toggle_lights()
+        bash_scripts.touchscreen_display(False)
 
     # Bash scripts
     elif keyword['category'] == 'computer':
         bash_scripts.wake_computer()
     elif keyword['category'] == 'screen_on':
-        bash_scripts.screen_on()
+        bash_scripts.touchscreen_display(True)
 
     # SAM responses
     elif keyword['category'] == 'activation':

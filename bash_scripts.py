@@ -6,6 +6,10 @@ def wake_computer():
     os.system('wakeonlan %s' % mac_address)
 
 
-# Turn the Raspberry Pi touchscreen screen on - requires sudo
-def screen_on():
-    os.system('echo 0 | sudo tee /sys/class/backlight/*/bl_power')
+# Turn the Raspberry Pi touchscreen screen on/off - requires sudo
+def touchscreen_display(turn_on):
+    if turn_on:
+        command = 0
+    else:
+        command = 1
+    os.system('echo %s | sudo tee /sys/class/backlight/*/bl_power' % command)
