@@ -1,21 +1,25 @@
 import snowboy.snowboydecoder as snowboydecoder
 import lights
 import bash_scripts
-import sam
-import news
+from sam import Sam
 import os
+import thread
+import media
 
 interrupted = False
 previous_command = ''
+sam = ''
 
 
 def init():
-
+    global sam
     hotword_models = []
     callbacks = []
     hotword_dict = {}
     main_model_folder = 'hotword_models'
     model_dir = os.listdir('hotword_models')
+    sam = Sam()
+
 
     # Each voice model is stored in a category folder
     # e.g. hotword_models/weather/whats_the_weather_like.pdml
@@ -33,8 +37,9 @@ def init():
             }
             hotword_models.append(file_path)
             callbacks.append(
-                lambda model=model: hotword_callback(
-                    hotword_dict[model.split('.')[0]]
+                lambda model=model: thread.start_new_thread(
+                    hotword_callback,
+                    (hotword_dict[model.split('.')[0]],)
                 )
             )
 
@@ -54,10 +59,10 @@ def init():
     )
 
 
-# Check against the category - we can have multiple voice   models per category
+# Check against the category - we can have multiple voice models per category
 def hotword_callback(keyword):
     play_confirmation_sound()
-    global previous_command
+
     # Lights
     if keyword['category'] == 'lights':
         lights.toggle_lights()
@@ -76,17 +81,12 @@ def hotword_callback(keyword):
         sam.hotword_response()
     elif keyword['category'] == 'weather':
         sam.get_weather()
-
-    # News briefing
     elif keyword['category'] == 'news':
-        news.play()
+        sam.get_news()
 
     # Cancel previous commands
-    elif (previous_command != 'cancel_that') \
-            and (keyword['category'] == 'cancel'):
-        hotword_callback(previous_command)
-
-    previous_command = keyword
+    elif keyword['category'] == 'cancel':
+        sam.stop_audio()
 
 
 def play_confirmation_sound():
