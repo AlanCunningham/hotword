@@ -56,7 +56,7 @@ class Sam:
                 # Check if audio is playing
                 pass
         except Exception:
-            pass)
+            pass
         self.stop_audio()
 
     def stop_audio(self):
