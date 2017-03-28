@@ -4,7 +4,6 @@ import bash_scripts
 from sam import Sam
 import os
 import thread
-import media
 
 interrupted = False
 previous_command = ''

@@ -1,10 +1,8 @@
 from gtts import gTTS
-import os
 import urllib
 import weather as forecast
 from pygame import mixer
 from mutagen.mp3 import MP3
-import time
 
 class Sam:
 
