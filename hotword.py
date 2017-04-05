@@ -8,6 +8,7 @@ import thread
 interrupted = False
 previous_command = ''
 sam = ''
+hotword_detector = ''
 
 
 def init():
@@ -18,7 +19,6 @@ def init():
     main_model_folder = 'hotword_models'
     model_dir = os.listdir('hotword_models')
     sam = Sam()
-
 
     # Each voice model is stored in a category folder
     # e.g. hotword_models/weather/whats_the_weather_like.pdml
@@ -32,6 +32,7 @@ def init():
             file_path = main_model_folder + '/' + category + '/' + model
             hotword_dict[split_model] = {
                 'category': category,
+                'hotword': split_model,
                 'file': file_path
             }
             hotword_models.append(file_path)
@@ -45,6 +46,7 @@ def init():
     sensitivity = [0.4]*len(hotword_models)
 
     # Setup hotword detector
+    global hotword_detector
     hotword_detector = snowboydecoder.HotwordDetector(
         hotword_models,
         sensitivity=sensitivity,
@@ -58,9 +60,13 @@ def init():
     )
 
 
+
+
 # Check against the category - we can have multiple voice models per category
 def hotword_callback(keyword):
+    global hotword_detector
     play_confirmation_sound()
+    print('Hotword: %s' % keyword['hotword'])
 
     # Lights
     if keyword['category'] == 'lights':
@@ -77,7 +83,10 @@ def hotword_callback(keyword):
 
     # SAM responses
     elif keyword['category'] == 'activation':
+        hotword_detector.terminate()
         sam.hotword_response()
+        sam.speech_recognition()
+        init()
     elif keyword['category'] == 'weather':
         sam.get_weather()
     elif keyword['category'] == 'news':

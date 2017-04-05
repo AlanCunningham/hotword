@@ -3,18 +3,51 @@ import urllib
 import weather as forecast
 from pygame import mixer
 from mutagen.mp3 import MP3
+import logging
+import speech_recognition as sr
+
 
 class Sam:
 
     activated = False
+    preferred_phrases = []
+    recogniser = sr.Recognizer()
 
     def __init__(self):
-        print('Sam INIT')
+        logging.basicConfig(format='%(message)s', level=logging.INFO)
+        # A list of phrases used by Google that will more likely be recognised
+        # over similar sounding phrases
+        self.preferred_phrases = [
+            'news',
+            'weather'
+        ]
 
     # Default response to being activated
     def hotword_response(self):
         self.play_audio('hotword_response.mp3')
         activated = True
+
+    def speech_recognition(self):
+        print('Listening...')
+
+        try:
+            with sr.Microphone() as source:
+                audio = self.recogniser.record(source, duration=2)
+
+            result = self.recogniser.recognize_google(audio, language='en-GB').lower()
+            self.play_audio('snowboy/resources/ding.wav')
+            print('Recognised: %s' % result)
+
+            if 'weather' in result:
+                self.get_weather()
+            elif 'news' in result:
+                self.get_news()
+
+        except sr.UnknownValueError:
+            logging.error('Speech not recognised')
+        except sr.RequestError:
+            logging.error('Request error')
+            self.speech_synthesis('Sorry, please try again')
 
     def speech_synthesis(self, text_to_say):
         language = 'en'
