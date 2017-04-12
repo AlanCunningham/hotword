@@ -60,8 +60,6 @@ def init():
     )
 
 
-
-
 # Check against the category - we can have multiple voice models per category
 def hotword_callback(keyword):
     global hotword_detector
@@ -71,9 +69,13 @@ def hotword_callback(keyword):
     # Lights
     if keyword['category'] == 'lights':
         lights.toggle_lights()
-    if keyword['category'] == 'turn_everything_off':
+    elif keyword['category'] == 'turn_everything_off':
         lights.toggle_lights()
         bash_scripts.touchscreen_display(False)
+    elif keyword['category'] == 'dim_the_lights':
+        lights.dim_lights()
+    elif keyword['category'] == 'full_brightness':
+        lights.full_brightness()
 
     # Bash scripts
     elif keyword['category'] == 'computer':

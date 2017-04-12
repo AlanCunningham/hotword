@@ -15,3 +15,11 @@ def toggle_lights():
         # Turn lights on
         # hue('lights', 1, 'state', on=True)
         hue.groups[1].action(on=True)
+
+
+def full_brightness():
+    hue.groups[1].action(bri=254, hue=8418, sat=140)
+
+
+def dim_lights():
+    hue.groups[1].action(bri=144, hue=7688, sat=199)

@@ -9,7 +9,6 @@ import speech_recognition as sr
 
 class Sam:
 
-    activated = False
     preferred_phrases = []
     recogniser = sr.Recognizer()
 
