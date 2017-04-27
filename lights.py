@@ -1,9 +1,10 @@
 from qhue import Bridge
-
+import ConfigParser
 
 # Move this to config file
-user = 'ZQBKP98FFwl96iTsnDXrdvGfKMFUB8N40iMpJth9'
-hue = Bridge('192.168.1.46', user)
+config = ConfigParser.ConfigParser()
+config.read('config.py')
+hue = Bridge(config.get('hue', 'bridge_ip'), config.get('hue', 'user'))
 
 
 def toggle_lights():

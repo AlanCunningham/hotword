@@ -5,15 +5,18 @@ from pygame import mixer
 from mutagen.mp3 import MP3
 import logging
 import speech_recognition as sr
+import ConfigParser
 
 
 class Sam:
 
     preferred_phrases = []
     recogniser = sr.Recognizer()
+    config = ConfigParser.ConfigParser()
 
     def __init__(self):
         logging.basicConfig(format='%(message)s', level=logging.INFO)
+        self.config.read('config.py')
         # A list of phrases used by Google that will more likely be recognised
         # over similar sounding phrases
         self.preferred_phrases = [
@@ -64,11 +67,9 @@ class Sam:
         self.speech_synthesis(full_weather)
 
     def get_news(self):
-        print('Downloading')
-        news_url = 'http://wsdownload.bbc.co.uk/worldservice/css/96mp3/latest/bbcnewssummary.mp3'
+        news_url = self.config.get('news', 'news_audio_url')
         news_file = urllib.URLopener()
         news_file.retrieve(news_url, 'news.mp3')
-        print('Finished')
         self.play_audio('news.mp3')
 
     def play_audio(self, file_path):

@@ -63,8 +63,9 @@ def init():
 # Check against the category - we can have multiple voice models per category
 def hotword_callback(keyword):
     global hotword_detector
-    play_confirmation_sound()
     print('Hotword: %s' % keyword['hotword'])
+    if keyword['category'] != 'activation':
+        play_confirmation_sound()
 
     # Lights
     if keyword['category'] == 'lights':
@@ -85,9 +86,12 @@ def hotword_callback(keyword):
 
     # SAM responses
     elif keyword['category'] == 'activation':
+        # Stop the hotword detector to free up the microphone
+        # for normal speech recognition
         hotword_detector.terminate()
         sam.hotword_response()
         sam.speech_recognition()
+        # When finished, restart the hotword detector
         init()
     elif keyword['category'] == 'weather':
         sam.get_weather()

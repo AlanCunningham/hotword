@@ -20,5 +20,5 @@ it for theirs.
 # Dependancies:
 - snowboy kitt.ai (Included as snowboy-linux or snowboy-pi, for Ubuntu and 
 Raspberry Pi respectively)
-- sudo apt-get install mpg321 wakeonlan libatlas3-base python-mutagen
-- pip install qhue gTTS schedul pygame
+- sudo apt-get install mpg321 wakeonlan libatlas3-base python-mutagen libboost-all-dev
+- pip install qhue gTTS schedul pygame face_recognition

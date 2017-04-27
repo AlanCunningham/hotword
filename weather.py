@@ -4,21 +4,21 @@
 import requests
 import json
 from datetime import datetime
-import time
-import schedule
-
+import ConfigParser
 
 class Weather:
     result = None
 
 
     def __init__(self):
+        config = ConfigParser.ConfigParser()
+        config.read('config.py')
         url = "https://api.forecast.io/forecast/"
 
-        api_key = '65e2aabda502b2a4ae4793adcee989ad'
-        lon = '51.4927245'
-        lat = '-0.2122906'
-        units = 'uk2'
+        api_key = config.get('weather', 'api_key')
+        lon = config.get('weather', 'location_lon')
+        lat = config.get('weather', 'location_lat')
+        units = config.get('weather', 'units')
 
         # Make the initial weather request
         request_url = url + api_key + "/" + lon + "," + lat + "?units=" + units
