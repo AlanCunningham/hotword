@@ -1,3 +1,6 @@
+[snowboy]
+raspberry_pi: False
+
 [hue]
 user: ZQBKP98FFwl96iTsnDXrdvGfKMFUB8N40iMpJth9
 bridge_ip: 192.168.1.46

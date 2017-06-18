@@ -1,9 +1,10 @@
-import snowboy.snowboydecoder as snowboydecoder
+# import snowboy.snowboydecoder as snowboydecoder
 import lights
 import bash_scripts
 from sam import Sam
 import os
 import thread
+import ConfigParser
 
 interrupted = False
 previous_command = ''
@@ -12,6 +13,19 @@ hotword_detector = ''
 
 
 def init():
+    config = ConfigParser.ConfigParser()
+    config.read('config.py')
+    # Snowboy hotword has a specific Raspberry Pi library - import if we're
+    # running on a Pi
+    print(config.get('snowboy', 'raspberry_pi'))
+    raspberry_pi = config.get('snowboy', 'raspberry_pi')
+    if raspberry_pi == 'True':
+        print('Raspberry pi')
+        import snowboy_pi.snowboydecoder as snowboydecoder
+    else:
+        print('Linux')
+        import snowboy_linux.snowboydecoder as snowboydecoder
+
     global sam
     hotword_models = []
     callbacks = []
@@ -64,8 +78,7 @@ def init():
 def hotword_callback(keyword):
     global hotword_detector
     print('Hotword: %s' % keyword['hotword'])
-    if keyword['category'] != 'activation':
-        play_confirmation_sound()
+    play_confirmation_sound()
 
     # Lights
     if keyword['category'] == 'lights':
@@ -89,7 +102,6 @@ def hotword_callback(keyword):
         # Stop the hotword detector to free up the microphone
         # for normal speech recognition
         hotword_detector.terminate()
-        sam.hotword_response()
         sam.speech_recognition()
         # When finished, restart the hotword detector
         init()
@@ -104,8 +116,7 @@ def hotword_callback(keyword):
 
 
 def play_confirmation_sound():
-    # snowboydecoder.play_audio_file(snowboydecoder.DETECT_DONG)
-    sam.play_audio('confirmation.mp3')
+    os.system('play audio/start.wav')
 
 def signal_handler(signal, frame):
     global interrupted
