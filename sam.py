@@ -26,7 +26,8 @@ class Sam:
 
     # Default response to being activated
     def hotword_response(self):
-        self.play_audio('hotword_response.mp3')
+        # self.play_audio('hotword_response.mp3')
+        self.play_audio('start.mp3')
         activated = True
 
     def speech_recognition(self):
@@ -37,7 +38,7 @@ class Sam:
                 audio = self.recogniser.record(source, duration=2)
 
             result = self.recogniser.recognize_google(audio, language='en-GB').lower()
-            self.play_audio('snowboy/resources/ding.wav')
+            self.play_audio('confirmation.mp3')
             print('Recognised: %s' % result)
 
             if 'weather' in result:

@@ -104,8 +104,8 @@ def hotword_callback(keyword):
 
 
 def play_confirmation_sound():
-    snowboydecoder.play_audio_file(snowboydecoder.DETECT_DONG)
-
+    # snowboydecoder.play_audio_file(snowboydecoder.DETECT_DONG)
+    sam.play_audio('confirmation.mp3')
 
 def signal_handler(signal, frame):
     global interrupted
