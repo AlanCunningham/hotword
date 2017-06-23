@@ -68,7 +68,6 @@ class Weather:
             suggestions.append("a t-shirt and jeans")
         else:
             suggestions.append("a t-shirt and shorts")
-        rain_chance = 0.6
         # Rain
         if rain_chance > 0.4:
             suggestions.append(". Probably best to bring your umbrella too")
