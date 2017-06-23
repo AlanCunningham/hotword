@@ -5,6 +5,7 @@ import requests
 import json
 from datetime import datetime
 import ConfigParser
+import random
 
 class Weather:
     result = None
@@ -21,10 +22,11 @@ class Weather:
         units = config.get('weather', 'units')
 
         # Make the initial weather request
-        request_url = url + api_key + "/" + lon + "," + lat + "?units=" + units
+        request_url = url + api_key + "/" + lat + "," + lon + "?units=" + units
         r = requests.get(request_url)
         resp = requests.get(url=request_url)
         self.result = json.loads(resp.text)
+        print('TIMEZONE: %s' % self.result['timezone'])
 
         self.suggest_clothes()
 
@@ -61,17 +63,23 @@ class Weather:
         if avg_temp < 10:
             suggestions.append("a coat")
         elif avg_temp >= 10 and avg_temp < 17:
-            suggestions.append("a jumper or shirt")
+            suggestions.append("a jumper or a shirt")
         elif avg_temp >= 17 and avg_temp < 20:
-            suggestions.append("a t-shirt")
+            suggestions.append("a t-shirt and jeans")
         else:
-            suggestions.append("some shorts")
-
+            suggestions.append("a t-shirt and shorts")
+        rain_chance = 0.6
         # Rain
         if rain_chance > 0.4:
-            suggestions.append(". Bring an umbrella")
+            suggestions.append(". Probably best to bring your umbrella too")
 
-        suggestion = "Wear " + "".join(suggestions)
+        intro = [
+            "I'd suggest you wear",
+            "I'd recommend you wear",
+            "You'll get away with",
+            "Looks like it's a day for"
+        ]
+        suggestion = intro[random.randint(0, len(intro)-1)] + "".join(suggestions)
         return suggestion
 
     def set_location(self, long, lat):
