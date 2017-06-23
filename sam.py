@@ -21,6 +21,7 @@ class Sam:
         # over similar sounding phrases
         self.preferred_phrases = [
             'news',
+            'headlines',
             'weather'
         ]
 
@@ -43,7 +44,7 @@ class Sam:
 
             if 'weather' in result:
                 self.get_weather()
-            elif 'news' in result:
+            elif any(news in result for news in ['news', 'headline']):
                 self.get_news()
 
         except sr.UnknownValueError:
