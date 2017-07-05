@@ -1,9 +1,15 @@
 from pygame import mixer
 from mutagen.mp3 import MP3
 import os
+import thread
 
 
 def play_audio(file_path):
+    # Play audio on a separate thread so we can cancel it if we want to
+    thread.start_new_thread(_play_audio, (file_path,))
+
+
+def _play_audio(file_path):
     extension = file_path.split('.')[1]
     if extension == 'wav':
         os.system('play %s' % file_path)

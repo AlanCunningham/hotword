@@ -109,7 +109,7 @@ def hotword_callback(keyword):
 
     # Cancel previous commands
     elif keyword['category'] == 'cancel':
-        sam.stop_audio()
+        audio_helper.stop_audio()
 
 
 def play_confirmation_sound():

@@ -74,9 +74,7 @@ class Weather:
 
         intro = [
             "I'd suggest you wear",
-            "I'd recommend you wear",
-            "You'll get away with",
-            "Looks like it's a day for"
+            "I'd recommend you wear"
         ]
         suggestion = intro[random.randint(0, len(intro)-1)] + "".join(suggestions)
         return suggestion
