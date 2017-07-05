@@ -1,12 +1,11 @@
-from gtts import gTTS
 import urllib
 import weather as forecast
-from pygame import mixer
-from mutagen.mp3 import MP3
 import logging
 import speech_recognition as sr
 import ConfigParser
-import os
+import speech
+import audio_helper
+
 
 class Sam:
 
@@ -25,39 +24,13 @@ class Sam:
             'weather'
         ]
 
-    # Default response to being activated
-    def hotword_response(self):
-        # self.play_audio('hotword_response.mp3')
-        self.play_audio('audio/start.wav')
-        activated = True
-
-    def speech_recognition(self):
-        print('Listening...')
-
-        try:
-            with sr.Microphone() as source:
-                audio = self.recogniser.record(source, duration=2)
-
-            result = self.recogniser.recognize_google(audio, language='en-GB').lower()
-            os.system('play audio/confirmation.wav')
-            print('Recognised: %s' % result)
-
-            if 'weather' in result:
+    def second_level_commands(self):
+        recognised_speech = speech.recognition()
+        if recognised_speech:
+            if 'weather' in recognised_speech:
                 self.get_weather()
-            elif any(news in result for news in ['news', 'headline']):
+            elif any(news in recognised_speech for news in ['news', 'headline']):
                 self.get_news()
-
-        except sr.UnknownValueError:
-            logging.error('Speech not recognised')
-        except sr.RequestError:
-            logging.error('Request error')
-            self.speech_synthesis('Sorry, please try again')
-
-    def speech_synthesis(self, text_to_say):
-        language = 'en'
-        tts = gTTS(text=text_to_say, lang=language)
-        tts.save('tts.mp3')
-        self.play_audio('tts.mp3')
 
     def get_weather(self):
         weather = forecast.Weather()
@@ -66,37 +39,10 @@ class Sam:
         chance_of_rain = int(daily_weather['precipProbability'] * 100)
         full_weather = "Today will be %s with a %s percent chance of rain. %s" \
                        % (summary, chance_of_rain, weather.suggest_clothes())
-        self.speech_synthesis(full_weather)
+        speech.synthesis(full_weather)
 
     def get_news(self):
         news_url = self.config.get('news', 'news_audio_url')
         news_file = urllib.URLopener()
         news_file.retrieve(news_url, 'news.mp3')
-        self.play_audio('news.mp3')
-
-    def play_audio(self, file_path):
-        audio_file = MP3(file_path)
-
-        # Get the sample rate of the mp3 (could be different)
-        sample_rate = audio_file.info.sample_rate
-        mixer.init(sample_rate)
-        mixer.music.load(file_path)
-        mixer.music.play()
-
-        try:
-            # The sample_rate cannot be reset until mixer.quit() has been called
-            while mixer.music.get_busy():
-                # Check if audio is playing
-                pass
-        except Exception:
-            pass
-        self.stop_audio()
-
-    def stop_audio(self):
-        global activated
-        try:
-            mixer.music.stop()
-            mixer.quit()
-        except Exception:
-            pass
-        activated = False
+        audio_helper.play_audio('news.mp3')

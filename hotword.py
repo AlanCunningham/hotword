@@ -5,6 +5,8 @@ from sam import Sam
 import os
 import thread
 import ConfigParser
+import audio_helper
+import speech
 
 interrupted = False
 previous_command = ''
@@ -17,13 +19,10 @@ def init():
     config.read('config.py')
     # Snowboy hotword has a specific Raspberry Pi library - import if we're
     # running on a Pi
-    print(config.get('snowboy', 'raspberry_pi'))
     raspberry_pi = config.get('snowboy', 'raspberry_pi')
     if raspberry_pi == 'True':
-        print('Raspberry pi')
         import snowboy_pi.snowboydecoder as snowboydecoder
     else:
-        print('Linux')
         import snowboy_linux.snowboydecoder as snowboydecoder
 
     global sam
@@ -74,7 +73,9 @@ def init():
     )
 
 
-# Check against the category - we can have multiple voice models per category
+# Commands that can be called without initially calling "Okay <assistant>"
+# Checks against the keyword's category so we can have multiple keywords
+# per category.
 def hotword_callback(keyword):
     global hotword_detector
     print('Hotword: %s' % keyword['hotword'])
@@ -97,18 +98,14 @@ def hotword_callback(keyword):
     elif keyword['category'] == 'screen_on':
         bash_scripts.touchscreen_display(True)
 
-    # SAM responses
+    # Second level responses
     elif keyword['category'] == 'activation':
         # Stop the hotword detector to free up the microphone
         # for normal speech recognition
         hotword_detector.terminate()
-        sam.speech_recognition()
+        sam.second_level_commands()
         # When finished, restart the hotword detector
         init()
-    elif keyword['category'] == 'weather':
-        sam.get_weather()
-    elif keyword['category'] == 'news':
-        sam.get_news()
 
     # Cancel previous commands
     elif keyword['category'] == 'cancel':
@@ -116,7 +113,7 @@ def hotword_callback(keyword):
 
 
 def play_confirmation_sound():
-    os.system('play audio/start.wav')
+    audio_helper.play_audio('audio/start.wav')
 
 def signal_handler(signal, frame):
     global interrupted
