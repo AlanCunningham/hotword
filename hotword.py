@@ -1,7 +1,6 @@
 # import snowboy.snowboydecoder as snowboydecoder
 import lights
 import bash_scripts
-from sam import Sam
 import os
 import thread
 import ConfigParser
@@ -13,7 +12,6 @@ import urllib
 
 interrupted = False
 previous_command = ''
-sam = ''
 hotword_detector = ''
 config = ConfigParser.ConfigParser()
 
@@ -28,13 +26,11 @@ def init():
     else:
         import snowboy_linux.snowboydecoder as snowboydecoder
 
-    global sam
     hotword_models = []
     callbacks = []
     hotword_dict = {}
     main_model_folder = 'hotword_models'
     model_dir = os.listdir('hotword_models')
-    sam = Sam()
 
     # Each voice model is stored in a category folder
     # e.g. hotword_models/weather/whats_the_weather_like.pdml
