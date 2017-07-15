@@ -79,9 +79,12 @@ class Weather:
         suggestion = intro[random.randint(0, len(intro)-1)] + "".join(suggestions)
         return suggestion
 
-    def set_location(self, long, lat):
-        self.location["lon"] = lon
-        self.location["lat"] = lat
 
-    def get_location(self):
-        return self.location
+    def get_weather_string(self):
+        daily_weather = self.get_daily_weather()
+        summary = daily_weather['summary']
+        chance_of_rain = int(daily_weather['precipProbability'] * 100)
+        full_weather = "Today will be %s with a %s percent chance of rain. %s" \
+                       % (
+                           summary, chance_of_rain, self.suggest_clothes())
+        return full_weather

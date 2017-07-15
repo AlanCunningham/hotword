@@ -1,7 +1,6 @@
 from qhue import Bridge
 import ConfigParser
 
-# Move this to config file
 config = ConfigParser.ConfigParser()
 config.read('config.py')
 hue = Bridge(config.get('hue', 'bridge_ip'), config.get('hue', 'user'))

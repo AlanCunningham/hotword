@@ -7,15 +7,18 @@ import thread
 import ConfigParser
 import audio_helper
 import speech
+import weather as forecast
+import urllib
+
 
 interrupted = False
 previous_command = ''
 sam = ''
 hotword_detector = ''
+config = ConfigParser.ConfigParser()
 
 
 def init():
-    config = ConfigParser.ConfigParser()
     config.read('config.py')
     # Snowboy hotword has a specific Raspberry Pi library - import if we're
     # running on a Pi
@@ -103,7 +106,7 @@ def hotword_callback(keyword):
         # Stop the hotword detector to free up the microphone
         # for normal speech recognition
         hotword_detector.terminate()
-        sam.second_level_commands()
+        second_level_commands()
         # When finished, restart the hotword detector
         init()
 
@@ -112,13 +115,25 @@ def hotword_callback(keyword):
         audio_helper.stop_audio()
 
 
+def second_level_commands():
+    recognised_speech = speech.recognition()
+    if recognised_speech:
+        if 'weather' in recognised_speech:
+            weather = forecast.Weather()
+            speech.synthesis(weather.get_weather_string())
+        elif any(news in recognised_speech for news in ['news', 'headline']):
+            news_url = config.get('news', 'news_audio_url')
+            news_file = urllib.URLopener()
+            news_file.retrieve(news_url, 'news.mp3')
+            audio_helper.play_audio('news.mp3')
+
+
 def play_confirmation_sound():
     audio_helper.play_audio('audio/start.wav')
 
 def signal_handler(signal, frame):
     global interrupted
     interrupted = True
-
 
 def interrupt_callback():
     global interrupted
