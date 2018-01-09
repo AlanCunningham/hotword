@@ -1,4 +1,3 @@
-
 # Raspberry Pi hotword voice assistant
 (That could use a catchier name)
 
@@ -27,6 +26,7 @@ Raspberry Pi respectively)
 # Setup
 - Sign up for a [Dark Sky dev account](https://darksky.net/dev/)
 - Update config.py with the following
+
 ```
 [snowboy]
 raspberry_pi: False  # Set to True if running on a Raspberry Pi
