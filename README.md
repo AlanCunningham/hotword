@@ -41,9 +41,9 @@ api_key: your_dark_sky_api_token
   location_lat: your_latitude
   units: uk2
   ```
- 
- # Running everything
- From terminal, run `python hotword.py`
+
+# Running everything
+From terminal, run `python hotword.py`
 
 # Commands
 - Saying `Okay SAM` opens up a set of secondary commands (a bit like saying "Okay Google").
@@ -56,14 +56,14 @@ api_key: your_dark_sky_api_token
   - "Play the `news`"
   - "What are today's `headlines`?"
 - Some commands can be said without needing to say `Okay SAM`:
-  - Lights
-    - "Turn the lights on"
-    - "Turn the lights off"
-    - "Dim the lights"
-    - "Full brightness"
-    - "Everything off"
-  - Wake on LAN
-    - "Computer"
+ - Lights
+  - "Turn the lights on"
+  - "Turn the lights off"
+  - "Dim the lights"
+  - "Full brightness"
+  - "Everything off"
+ - Wake on LAN
+  - "Computer"
 
 You might find better results to record your own activation words on the [Snowboy Hotword Detection](https://snowboy.kitt.ai) website.  Hotword files (.pdml) can be placed in the `hotword_models` folder in the corresponding category folder.  For example, to add your own "Okay SAM" hotword:
 - Record your activation hotword on the Snowboy website (doesn't need to be "Okay SAM" - it could be "Okay Google")
