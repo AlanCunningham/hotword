@@ -64,6 +64,9 @@ From terminal, run `python hotword.py`
  - "Everything off"
 - Wake on LAN
  - "Computer"
+- Stop command
+ - "Cancel that"
+ - "Stop playing"
 
 You might find better results to record your own activation words on the [Snowboy Hotword Detection](https://snowboy.kitt.ai) website.  Hotword files (.pdml) can be placed in the `hotword_models` folder in the corresponding category folder.  For example, to add your own "Okay SAM" hotword:
 - Record your activation hotword on the Snowboy website (doesn't need to be "Okay SAM" - it could be "Okay Google")
