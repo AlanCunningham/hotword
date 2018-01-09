@@ -2,11 +2,11 @@
 raspberry_pi: False
 
 [hue]
-user: ZQBKP98FFwl96iTsnDXrdvGfKMFUB8N40iMpJth9
-bridge_ip: 192.168.1.46
+user: your_hue_user_id
+bridge_ip: your_hue_bridge_ip_address
 
 [weather]
-api_key: 65e2aabda502b2a4ae4793adcee989ad
+api_key: your_dark_sky_api_token
 location_lon: -0.2122906
 location_lat: 51.4927245
 units: uk2
