@@ -46,7 +46,7 @@ api_key: your_dark_sky_api_token
 From terminal, run `python hotword.py`
 
 # Commands
-- Saying `Okay SAM` opens up a set of secondary commands (a bit like saying "Okay Google").
+Saying `Okay SAM` will activate the assistant and open up a set of secondary commands (a bit like saying "Okay Google"):
  - Weather
    - Any sentence with  the word `weather`
    - "What's the `weather` like?"
@@ -55,7 +55,7 @@ From terminal, run `python hotword.py`
   - Any sentence with `news` or `headlines`
   - "Play the `news`"
   - "What are today's `headlines`?"
-- Some commands can be said without needing to say `Okay SAM`:
+Some commands can be said without needing to say `Okay SAM`:
 - Lights
   - "Turn the lights on"
   - "Turn the lights off"
