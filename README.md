@@ -55,6 +55,7 @@ Saying `Okay SAM` will activate the assistant and open up a set of secondary com
   - Any sentence with `news` or `headlines`
   - "Play the `news`"
   - "What are today's `headlines`?"
+
 Some commands can be said without needing to say `Okay SAM`:
 - Lights
   - "Turn the lights on"
