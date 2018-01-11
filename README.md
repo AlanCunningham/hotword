@@ -1,5 +1,4 @@
 # Raspberry Pi hotword voice assistant
-(That could use a catchier name)
 
 A voice assistant, along the same vein as Amazon Echo and Google Home using
 [Snowboy hotword detection](https://snowboy.kitt.ai/) for the voice activation.
